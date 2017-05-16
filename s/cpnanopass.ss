@@ -14317,6 +14317,11 @@
                 (unless (null? ls) (set! any? #t) (printf "\n~s:~{ ~s~}" x ls))))
             (append spillable* unspillable* (vector->list regvec) (map get-fv (iota (fx+ max-fv 1)))))
           (unless any? (printf " none"))
+          (printf "\n~s spillable ~s unspillable ~s regvec ~a fv"
+                  (length spillable*)
+                  (length unspillable*)
+                  (length (vector->list regvec))
+                  (fx+ max-fv 1))
           (newline)))
 
       (module (assign-frame! assign-new-frame!)
@@ -15485,7 +15490,7 @@
                    (RApass unparse-L15a record-call-live! block* varvec)
                    ;; NB: we could just use (vector-length varvec) to get live-size
                    (RApass unparse-L15a do-spillable-conflict! kspillable varvec live-size block*)
-                   #;(show-conflicts (info-lambda-name info) varvec '#())
+                   (show-conflicts (info-lambda-name info) varvec '#())
                    ; find frame homes for call-live variables; adds new fv x spillable conflicts
                    (RApass unparse-L15a assign-frame!)
                    #;(show-homes)
